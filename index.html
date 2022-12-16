@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition Bubble Chart</title>
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <div id="stats" onclick="location.href='./score.html';" ></div><br>
+    <div id="stats2" onclick="location.href='./comments.html';">f</div>
+    <svg id="bubble-chart"></svg>
+    <div class="row align-items-center">
+        <div class="col-sm-2">
+            <p id="value-time" align="center"></p>
+        </div>
+        <div class="col-sm">
+            <div id="slider-time"></div>
+        </div>
+    </div>
+    <div class="tooltip">
+        <img alt="" />
+        <div>
+            <a></a>
+            <span></span>
+        </div>
+    </div>
+
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://unpkg.com/jeezy@1.11.2/lib/jeezy.min.js"></script>
+    <script src="bubble.js"></script>
+</body>
+
+</html>

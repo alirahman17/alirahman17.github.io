@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: 0.5;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 14px sans-serif;
+}
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v3.js"></script>
+<script src="scripts/require.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $.getJSON('https://raw.githubusercontent.com/danmao124/pruv/main/processed_data/2019/December.json',function(data){
+            var json = data.data;
+
+            var r = 1500,
+                format = d3.format(",d"),
+                fill = d3.scale.category20c();
+
+            var bubble = d3.layout.pack()
+                .sort(null)
+                .size([r, r])
+                .padding(1.5);
+
+            var vis = d3.select("body").append("svg")
+                .attr("width", r)
+                .attr("height", r)
+                .attr("class", "bubble");
+
+
+            var node = vis.selectAll("g.node")
+                .data(bubble.nodes(classes(json))
+                .filter(function(d) { return !d.children; }))
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                color = d3.scale.category20();
+
+              node.append("title")
+                  .text(function(d) { return d.className + ": " + format(d.value); });
+
+              node.append("circle")
+                  .attr("r", function(d) { return d.r; })
+                  .style("fill", function(d) {return color(d.topicName);});
+
+            var text = node.append("text")
+                .attr("text-anchor", "middle")
+                .attr("dy", ".3em")
+                .text(function(d) { return d.className.substring(0, d.r / 3)});
+
+              text.append("tspan")
+                  .attr("dy", "1.2em")
+                  .attr("x", 0)
+                  .text(function(d) {return Math.ceil(d.value * 10000) /10000; });
+
+            // Returns a flattened hierarchy containing all leaf nodes under the root.
+            function classes(node) {
+              var classes = [];
+
+              for (var i=0; i < node.length; i++) {
+                  if(node[i].term == null)
+                    node[i].term = " ";
+                 classes.push({topicName: node[i].topic, className: node[i].term, value: node[i].probability});
+              }
+              return {children: classes};
+            }
+
+
+        }).error(function(){
+            console.log('error');
+        });
+    });
+</script>
+</script>
